@@ -69,13 +69,13 @@ send_summary() {
     echo "[!] Summary:"
     echo "    Panel Domain: $FQDN"
     echo "    Webserver: $WEBSERVER"
-    echo "    Email: admin@gmail.com"
-    echo "    SSL: true"
-    echo "    Username: admin"
-    echo "    First name: admin"
-    echo "    Last name: admin"
-    if [ -n "admin" ]; then
-    echo "    Password: admin"
+    echo "    Email: $EMAIL"
+    echo "    SSL: $SSLSTATUS"
+    echo "    Username: $USERNAME"
+    echo "    First name: $FIRSTNAME"
+    echo "    Last name: $LASTNAME"
+    if [ -n "$USERPASSWORD" ]; then
+    echo "    Password: $(printf "%0.s*" $(seq 1 ${#USERPASSWORD}))"
     else
         echo "    Password:"
     fi
@@ -98,19 +98,19 @@ panel(){
 finish(){
     clear
     cd
-    echo -e "Ringkasan instalasi\n\nPanel Domain: $FQDN\nWebserver: $WEBSERVER\nUsername: admin\nEmail: admin@gmail.com\nFirst name: admin\nLast name: admin\nPassword: admin\nDatabase password: thomz\nPassword for Database Host: thomzHOST" >> panel_credentials.txt
+    echo -e "Ringkasan instalasi\n\nPanel Domain: $FQDN\nWebserver: $WEBSERVER\nUsername: $USERNAME\nEmail: $EMAIL\nFirst name: $FIRSTNAME\nLast name: $LASTNAME\nPassword: $(printf "%0.s*" $(seq 1 ${#USERPASSWORD}))\nDatabase password: thomz\nPassword for Database Host: thomzHOST" >> panel_credentials.txt
 
     echo "[!] Installation of Pterodactyl Panel done"
     echo ""
     echo "    Ringkasan instalasi" 
     echo "    Panel Domain: $FQDN"
     echo "    Webserver: $WEBSERVER"
-    echo "    Email: admin@gmail.com"
+    echo "    Email: $EMAIL"
     echo "    SSL: $SSLSTATUS"
-    echo "    Username: admin"
-    echo "    First name: admin"
-    echo "    Last name: admin"
-    echo "    Password: admin"
+    echo "    Username: $USERNAME"
+    echo "    First name: $FIRSTNAME"
+    echo "    Last name: $LASTNAME"
+    echo "    Password: $(printf "%0.s*" $(seq 1 ${#USERPASSWORD}))"
     echo "" 
     echo "    Database password: thomz"
     echo "    Password for Database Host: thomzHOST"
@@ -161,10 +161,10 @@ panel_conf(){
     [ "$SSLSTATUS" == false ] && appurl="http://$FQDN"
     mariadb -u root -e "CREATE USER 'pterodactyluser'@'127.0.0.1' IDENTIFIED BY 'thomzHOST';" && mariadb -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'pterodactyluser'@'127.0.0.1' WITH GRANT OPTION;"
     mariadb -u root -e "CREATE USER 'pterodactyl'@'127.0.0.1' IDENTIFIED BY 'thomz';" && mariadb -u root -e "CREATE DATABASE panel;" && mariadb -u root -e "GRANT ALL PRIVILEGES ON panel.* TO 'pterodactyl'@'127.0.0.1' WITH GRANT OPTION;" && mariadb -u root -e "FLUSH PRIVILEGES;"
-    php artisan p:environment:setup --author="thomz@gmail.com" --url="$appurl" --timezone="CET" --telemetry=false --cache="redis" --session="redis" --queue="redis" --redis-host="localhost" --redis-pass="null" --redis-port="6379" --settings-ui=true
+    php artisan p:environment:setup --author="$EMAIL" --url="$appurl" --timezone="CET" --telemetry=false --cache="redis" --session="redis" --queue="redis" --redis-host="localhost" --redis-pass="null" --redis-port="6379" --settings-ui=true
     php artisan p:environment:database --host="127.0.0.1" --port="3306" --database="panel" --username="pterodactyl" --password="thomz"
     php artisan migrate --seed --force
-    php artisan p:user:make --email="admin@gmail.com" --username="admin" --name-first="admin" --name-last="admin" --password="admin" --admin=1
+    php artisan p:user:make --email="$EMAIL" --username="$USERNAME" --name-first="$FIRSTNAME" --name-last="$LASTNAME" --password="$(printf "%0.s*" $(seq 1 ${#USERPASSWORD}))" --admin=1
     chown -R www-data:www-data /var/www/pterodactyl/*
     if [ "$dist" = "centos" ]; then
         chown -R nginx:nginx /var/www/pterodactyl/*
@@ -182,7 +182,7 @@ panel_conf(){
         sed -i -e "s@<domain>@${FQDN}@g" /etc/nginx/conf.d/pterodactyl.conf
         sed -i -e "s@/run/php/php8.1-fpm.sock@/var/run/php-fpm/pterodactyl.sock@g" /etc/nginx/conf.d/pterodactyl.conf
         systemctl stop nginx
-        certbot certonly --standalone -d $FQDN --staple-ocsp --no-eff-email -m thomz@gmail.com --agree-tos
+        certbot certonly --standalone -d $FQDN --staple-ocsp --no-eff-email -m $EMAIL --agree-tos
         systemctl start nginx
         finish
         fi
@@ -199,7 +199,7 @@ panel_conf(){
         sed -i -e "s@<domain>@${FQDN}@g" /etc/nginx/sites-enabled/pterodactyl.conf
 
         systemctl stop nginx
-        certbot certonly --standalone -d $FQDN --staple-ocsp --no-eff-email -m thomz@gmail.com --agree-tos
+        certbot certonly --standalone -d $FQDN --staple-ocsp --no-eff-email -m $EMAIL --agree-tos
         systemctl start nginx
         finish
         fi
@@ -211,7 +211,7 @@ panel_conf(){
          a2enmod rewrite
          a2enmod ssl
         systemctl stop apache2
-        certbot certonly --standalone -d $FQDN --staple-ocsp --no-eff-email -m thomz@gmail.com --agree-tos
+        certbot certonly --standalone -d $FQDN --staple-ocsp --no-eff-email -m $EMAIL --agree-tos
         systemctl start apache2
         finish
         fi
@@ -357,11 +357,11 @@ panel_summary(){
     echo "[!] Summary:"
     echo "    Panel Domain: $FQDN"
     echo "    Webserver: $WEBSERVER"
-    echo "    SSL: true"
-    echo "    Username: admin"
-    echo "    First name: admin"
-    echo "    Last name: admin"
-    echo "    Password: admin"
+    echo "    SSL: $SSLSTATUS"
+    echo "    Username: $USERNAME"
+    echo "    First name: $FIRSTNAME"
+    echo "    Last name: $LASTNAME"
+    echo "    Password: $(printf "%0.s*" $(seq 1 ${#USERPASSWORD}))"
     echo ""
     echo "    Kredensial ini telah disimpan dalam sebuah file bernama" 
     echo "    panel_credentials.txt di direktori Anda saat ini"
@@ -396,6 +396,21 @@ panel_fqdn(){
         panel_ssl
     fi
 }
+panel_ssl(){
+    send_summary
+    echo "[!] Apakah Anda ingin menggunakan SSL untuk Panel Anda? Hal ini direkomendasikan. (Y/N)"
+    echo "[!] SSL direkomendasikan untuk setiap panel."
+    read -r SSL_CONFIRM
+
+    if [[ "$SSL_CONFIRM" =~ [Yy] ]]; then
+        SSLSTATUS=true
+        panel_email
+    fi
+    if [[ "$SSL_CONFIRM" =~ [Nn] ]]; then
+        SSLSTATUS=false
+        panel_email
+    fi
+}
 panel_email(){
     send_summary
     if  [ "$SSLSTATUS" =  "true" ]; then
@@ -404,34 +419,34 @@ panel_email(){
     if  [ "$SSLSTATUS" =  "false" ]; then
         echo "[!] Silakan masukkan email Anda. Ini akan digunakan untuk mengatur Panel ini."
         fi
-    read -r admin@gmail.com
+    read -r $EMAIL
     panel_username
 }
 
 panel_username(){
     send_summary
     echo "[!] Silakan masukkan nama pengguna untuk akun admin. Anda dapat menggunakan nama pengguna Anda untuk masuk ke Akun Pterodactyl Anda."
-    read -r admin
+    read -r USERNAME
     panel_firstname
 }
 panel_firstname(){
     send_summary
     echo "[!] Masukkan nama depan untuk akun admin."
-    read -r admin
+    read -r FIRSTNAME
     panel_lastname
 }
 
 panel_lastname(){
     send_summary
     echo "[!] Masukkan nama belakang untuk akun admin."
-    read -r admin
+    read -r LASTNAME
     panel_password
 }
 
 panel_password(){
     send_summary
     echo "[!] Masukkan kata sandi untuk akun admin."
-    local USERPASSWORD="admin"
+    local USERPASSWORD=""
     while IFS= read -r -s -n 1 char; do
         if [[ $char == $'\0' ]]; then
             break
@@ -448,22 +463,6 @@ panel_password(){
     echo
     panel_summary
 }
-panel_ssl(){
-    send_summary
-    echo "[!] Apakah Anda ingin menggunakan SSL untuk Panel Anda? Hal ini direkomendasikan. (Y/N)"
-    echo "[!] SSL direkomendasikan untuk setiap panel."
-    read -r SSL_CONFIRM
-
-    if [[ "$SSL_CONFIRM" =~ [Yy] ]]; then
-        SSLSTATUS=true
-        panel_email
-    fi
-    if [[ "$SSL_CONFIRM" =~ [Nn] ]]; then
-        SSLSTATUS=false
-        panel_email
-    fi
-}
-
 
 
 ### Pterodactyl Wings Installation ###
@@ -858,7 +857,7 @@ switch(){
         curl -o /etc/nginx/sites-enabled/pterodactyl.conf https://raw.githubusercontent.com/guldkage/Pterodactyl-Installer/main/configs/pterodactyl-nginx-ssl.conf || exit || warning "Pterodactyl Panel not installed!"
         sed -i -e "s@<domain>@${DOMAINSWITCH}@g" /etc/nginx/sites-enabled/pterodactyl.conf
         systemctl stop nginx
-        certbot certonly --standalone -d $DOMAINSWITCH --staple-ocsp --no-eff-email -m admin@gmail.comSWITCHDOMAINS --agree-tos || exit || warning "Errors accured."
+        certbot certonly --standalone -d $DOMAINSWITCH --staple-ocsp --no-eff-email -m $EMAILSWITCHDOMAINS --agree-tos || exit || warning "Errors accured."
         systemctl start nginx
         echo ""
         echo "[!] Mengubah domain"
