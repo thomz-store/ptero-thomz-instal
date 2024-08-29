@@ -31,10 +31,10 @@ panel_conf(){
     [ "$SSL" == false ] && appurl="http://$FQDN"
     DBPASSWORD=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1`
     mariadb -u root -e "CREATE USER 'pterodactyl'@'127.0.0.1' IDENTIFIED BY '$DBPASSWORD';" && mariadb -u root -e "CREATE DATABASE panel;" && mariadb -u root -e "GRANT ALL PRIVILEGES ON panel.* TO 'pterodactyl'@'127.0.0.1' WITH GRANT OPTION;" && mariadb -u root -e "FLUSH PRIVILEGES;"
-    php artisan p:environment:setup --author="$EMAIL" --url="$appurl" --timezone="CET" --telemetry=false --cache="redis" --session="redis" --queue="redis" --redis-host="localhost" --redis-pass="null" --redis-port="6379" --settings-ui=true
+    php artisan p:environment:setup --author="admin@gmail.com" --url="$appurl" --timezone="CET" --telemetry=false --cache="redis" --session="redis" --queue="redis" --redis-host="localhost" --redis-pass="null" --redis-port="6379" --settings-ui=true
     php artisan p:environment:database --host="127.0.0.1" --port="3306" --database="panel" --username="pterodactyl" --password="$DBPASSWORD"
     php artisan migrate --seed --force
-    php artisan p:user:make --email="$EMAIL" --username="$USERNAME" --name-first="$FIRSTNAME" --name-last="$LASTNAME" --password="$PASSWORD" --admin=1
+    php artisan p:user:make --email="admin@gmail.com" --username="admin" --name-first="admin" --name-last="adminE" --password="admin" --admin=1
     chown -R www-data:www-data /var/www/pterodactyl/*
     curl -o /etc/systemd/system/pteroq.service https://raw.githubusercontent.com/guldkage/Pterodactyl-Installer/main/configs/pteroq.service
     (crontab -l ; echo "* * * * * php /var/www/pterodactyl/artisan schedule:run >> /dev/null 2>&1")| crontab -
@@ -46,7 +46,7 @@ panel_conf(){
         curl -o /etc/nginx/sites-enabled/pterodactyl.conf https://raw.githubusercontent.com/guldkage/Pterodactyl-Installer/main/configs/pterodactyl-nginx-ssl.conf
         sed -i -e "s@<domain>@${FQDN}@g" /etc/nginx/sites-enabled/pterodactyl.conf
         systemctl stop nginx
-        certbot certonly --standalone -d $FQDN --staple-ocsp --no-eff-email -m $EMAIL --agree-tos
+        certbot certonly --standalone -d $FQDN --staple-ocsp --no-eff-email -m admin@gmail.com --agree-tos
         systemctl start nginx
         finish
         fi
@@ -122,27 +122,27 @@ LASTNAME=`echo $6`
 PASSWORD=`echo $7`
 WINGS=`echo $8`
 
-if [ -z "$FQDN" ] || [ -z "$SSL" ] || [ -z "$EMAIL" ] || [ -z "$USERNAME" ] || [ -z "$FIRSTNAME" ] || [ -z "$LASTNAME" ] || [ -z "$PASSWORD" ] || [ -z "$WINGS" ]; then
-    echo "Error! THe usage of this script is incorrect."
+if [ -z "$FQDN" ] || [ -z "$SSL" ] || [ -z "admin@gmail.com" ] || [ -z "admin" ] || [ -z "admin" ] || [ -z "adminE" ] || [ -z "admin" ] || [ -z "$WINGS" ]; then
+    echo "Kesalahan! Penggunaan skrip ini salah."
     exit 1
 fi
 
 echo "Checking your OS.."
 if { [ "$dist" = "ubuntu" ] && [ "$version" = "20.04" ]; } || { [ "$dist" = "debian" ] && [ "$version" = "11" ] || [ "$version" = "12" ]; }; then
-    echo "Welcome to Autoinstall of Pterodactyl Panel"
-    echo "Quick summary before the install begins:"
+    echo "Selamat datang di Pemasangan Otomatis Panel Pterodactyl"
+    echo "Ringkasan singkat sebelum penginstalan dimulai:"
     echo ""
     echo "FQDN (URL): $FQDN"
     echo "SSL: $SSL"
     echo "Preselected webserver: NGINX"
-    echo "Email $EMAIL"
-    echo "Username $USERNAME"
-    echo "First name $FIRSTNAME"
-    echo "Last name $LASTNAME"
-    echo "Password: $PASSWORD"
+    echo "Email admin@gmail.com"
+    echo "Username admin"
+    echo "First name admin"
+    echo "Last name adminE"
+    echo "Password: admin"
     echo "Wings install: $WINGS"
     echo ""
-    echo "Starting automatic installation in 5 seconds"
+    echo "Memulai pemasangan otomatis dalam 5 detik"
     sleep 5s
     panel_install
 else
