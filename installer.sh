@@ -387,7 +387,7 @@ panel_fqdn(){
     echo -e "${RED} =============================================== ${NC}"
     echo -e "${RED}              MASUKAN SUBDOMAIN KAMU             ${NC}"
     echo -e "${RED}             (panel.thomvelz.tamvan)             ${NC}"
-    echo -e "${RED}                    ©Thomvelz                    ${NC}
+    echo -e "${RED}                    ©Thomvelz                    ${NC}"
     echo -e "${RED} =============================================== ${NC}"
     read -r FQDN
     [ -z "$FQDN" ] && echo "FQDN can't be empty."
@@ -408,7 +408,7 @@ panel_ssl(){
     echo -e "${RED} =============================================== ${NC}"
     echo -e "${RED}                   AKTIFKAN SSL                  ${NC}"
     echo -e "${RED}                      (Y/N)                      ${NC}"
-    echo -e "${RED}                    ©Thomvelz                    ${NC}
+    echo -e "${RED}                    ©Thomvelz                    ${NC}"
     echo -e "${RED} =============================================== ${NC}"
     read -r SSL_CONFIRM
 
@@ -427,7 +427,7 @@ panel_email(){
     echo -e "${RED} =============================================== ${NC}"
     echo -e "${RED}                MASUKAN EMAIL KAMU               ${NC}"
     echo -e "${RED}             contoh thomz@gmail.com              ${NC}"
-    echo -e "${RED}                    ©Thomvelz                    ${NC}
+    echo -e "${RED}                    ©Thomvelz                    ${NC}"
     echo -e "${RED} =============================================== ${NC}"
         fi
     if  [ "$SSLSTATUS" =  "false" ]; then
@@ -442,7 +442,7 @@ panel_username(){
     echo -e "${RED} =============================================== ${NC}"
     echo -e "${RED}              MASUKAN USERNAME KAMU              ${NC}"
     echo -e "${RED}                 contoh : thomz                  ${NC}"
-    echo -e "${RED}                    ©Thomvelz                    ${NC}
+    echo -e "${RED}                    ©Thomvelz                    ${NC}"
     echo -e "${RED} =============================================== ${NC}"
     read -r USERNAME
     panel_firstname
@@ -452,7 +452,7 @@ panel_firstname(){
     echo -e "${RED} =============================================== ${NC}"
     echo -e "${RED}              MASUKAN USERNAME KAMU              ${NC}"
     echo -e "${RED}                 contoh : thomz                  ${NC}"
-    echo -e "${RED}                    ©Thomvelz                    ${NC}
+    echo -e "${RED}                    ©Thomvelz                    ${NC}"
     echo -e "${RED} =============================================== ${NC}"
     read -r FIRSTNAME
     panel_lastname
@@ -463,7 +463,7 @@ panel_lastname(){
     echo -e "${RED} =============================================== ${NC}"
     echo -e "${RED}              MASUKAN USERNAME KAMU              ${NC}"
     echo -e "${RED}                 contoh : thomz                  ${NC}"
-    echo -e "${RED}                    ©Thomvelz                    ${NC}
+    echo -e "${RED}                    ©Thomvelz                    ${NC}"
     echo -e "${RED} =============================================== ${NC}"
     read -r LASTNAME
     panel_password
@@ -474,7 +474,7 @@ panel_password(){
     echo -e "${RED} =============================================== ${NC}"
     echo -e "${RED}              MASUKAN USERNAME KAMU              ${NC}"
     echo -e "${RED}                 contoh : thomz                  ${NC}"
-    echo -e "${RED}                    ©Thomvelz                    ${NC}
+    echo -e "${RED}                    ©Thomvelz                    ${NC}"
     echo -e "${RED} =============================================== ${NC}"
     local USERPASSWORD=""
     while IFS= read -r -s -n 1 char; do
@@ -978,7 +978,7 @@ options(){
         echo "Kesempatan Anda menjadi terbatas karena CentOS."
     echo -e "${RED} =============================================== ${NC}"
     echo -e "${RED}           AUTO INSTAL PANEL BY THOMZ            ${NC}"
-    echo -e "${RED}                    ©Thomvelz                    ${NC}
+    echo -e "${RED}                    ©Thomvelz                    ${NC}"
     echo -e "${RED} =============================================== ${NC}"
         echo "Apa yang ingin Anda lakukan Tuan Thomz?"
         echo "[1] Install Panel."
