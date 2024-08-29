@@ -20,7 +20,11 @@ dist="$(. /etc/os-release && echo "$ID")"
 version="$(. /etc/os-release && echo "$VERSION_ID")"
 USERPASSWORD=""
 WINGSNOQUESTIONS=false
-
+BLUE='\033[0;34m'       
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+NC='\033[0m'
 ### OUTPUTS ###
 
 function trap_ctrlc ()
@@ -380,8 +384,11 @@ panel_summary(){
 
 panel_fqdn(){
     send_summary
-    echo "[!] Silakan masukkan Domain/Subdomain Kalian. Anda akan mengakses Panel dengan ini."
-    echo "[!] Example: panel.thomvelz.tamvan."
+    echo -e "${RED} =============================================== ${NC}"
+    echo -e "${RED}              MASUKAN SUBDOMAIN KAMU             ${NC}"
+    echo -e "${RED}             (panel.thomvelz.tamvan)             ${NC}"
+    echo -e "${RED}                    ©Thomvelz                    ${NC}
+    echo -e "${RED} =============================================== ${NC}"
     read -r FQDN
     [ -z "$FQDN" ] && echo "FQDN can't be empty."
     IP=$(dig +short myip.opendns.com @resolver2.opendns.com -4)
@@ -398,8 +405,11 @@ panel_fqdn(){
 }
 panel_ssl(){
     send_summary
-    echo "[!] Apakah Anda ingin menggunakan SSL untuk Panel Anda? Hal ini direkomendasikan. (Y/N)"
-    echo "[!] SSL direkomendasikan untuk setiap panel."
+    echo -e "${RED} =============================================== ${NC}"
+    echo -e "${RED}                   AKTIFKAN SSL                  ${NC}"
+    echo -e "${RED}                      (Y/N)                      ${NC}"
+    echo -e "${RED}                    ©Thomvelz                    ${NC}
+    echo -e "${RED} =============================================== ${NC}"
     read -r SSL_CONFIRM
 
     if [[ "$SSL_CONFIRM" =~ [Yy] ]]; then
@@ -414,38 +424,58 @@ panel_ssl(){
 panel_email(){
     send_summary
     if  [ "$SSLSTATUS" =  "true" ]; then
-        echo "[!] Silakan masukkan email Anda. Email ini akan dibagikan dengan Lets Encrypt dan digunakan untuk menyiapkan Panel ini."
+    echo -e "${RED} =============================================== ${NC}"
+    echo -e "${RED}                MASUKAN EMAIL KAMU               ${NC}"
+    echo -e "${RED}             contoh thomz@gmail.com              ${NC}"
+    echo -e "${RED}                    ©Thomvelz                    ${NC}
+    echo -e "${RED} =============================================== ${NC}"
         fi
     if  [ "$SSLSTATUS" =  "false" ]; then
         echo "[!] Silakan masukkan email Anda. Ini akan digunakan untuk mengatur Panel ini."
         fi
-    read -r $EMAIL
+    read -r EMAIL
     panel_username
 }
 
 panel_username(){
     send_summary
-    echo "[!] Silakan masukkan nama pengguna untuk akun admin. Anda dapat menggunakan nama pengguna Anda untuk masuk ke Akun Pterodactyl Anda."
+    echo -e "${RED} =============================================== ${NC}"
+    echo -e "${RED}              MASUKAN USERNAME KAMU              ${NC}"
+    echo -e "${RED}                 contoh : thomz                  ${NC}"
+    echo -e "${RED}                    ©Thomvelz                    ${NC}
+    echo -e "${RED} =============================================== ${NC}"
     read -r USERNAME
     panel_firstname
 }
 panel_firstname(){
     send_summary
-    echo "[!] Masukkan nama depan untuk akun admin."
+    echo -e "${RED} =============================================== ${NC}"
+    echo -e "${RED}              MASUKAN USERNAME KAMU              ${NC}"
+    echo -e "${RED}                 contoh : thomz                  ${NC}"
+    echo -e "${RED}                    ©Thomvelz                    ${NC}
+    echo -e "${RED} =============================================== ${NC}"
     read -r FIRSTNAME
     panel_lastname
 }
 
 panel_lastname(){
     send_summary
-    echo "[!] Masukkan nama belakang untuk akun admin."
+    echo -e "${RED} =============================================== ${NC}"
+    echo -e "${RED}              MASUKAN USERNAME KAMU              ${NC}"
+    echo -e "${RED}                 contoh : thomz                  ${NC}"
+    echo -e "${RED}                    ©Thomvelz                    ${NC}
+    echo -e "${RED} =============================================== ${NC}"
     read -r LASTNAME
     panel_password
 }
 
 panel_password(){
     send_summary
-    echo "[!] Masukkan kata sandi untuk akun admin."
+    echo -e "${RED} =============================================== ${NC}"
+    echo -e "${RED}              MASUKAN USERNAME KAMU              ${NC}"
+    echo -e "${RED}                 contoh : thomz                  ${NC}"
+    echo -e "${RED}                    ©Thomvelz                    ${NC}
+    echo -e "${RED} =============================================== ${NC}"
     local USERPASSWORD=""
     while IFS= read -r -s -n 1 char; do
         if [[ $char == $'\0' ]]; then
@@ -946,7 +976,10 @@ oscheck(){
 options(){
     if [ "$dist" = "centos" ] && { [ "$version" = "7" ]; }; then
         echo "Kesempatan Anda menjadi terbatas karena CentOS."
-        echo ""
+    echo -e "${RED} =============================================== ${NC}"
+    echo -e "${RED}           AUTO INSTAL PANEL BY THOMZ            ${NC}"
+    echo -e "${RED}                    ©Thomvelz                    ${NC}
+    echo -e "${RED} =============================================== ${NC}"
         echo "Apa yang ingin Anda lakukan Tuan Thomz?"
         echo "[1] Install Panel."
         echo "[2] Install Wings."
