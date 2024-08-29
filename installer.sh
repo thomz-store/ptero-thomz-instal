@@ -147,7 +147,7 @@ panel_webserver(){
     echo "    silahkan ketik yes bang thomz"
     read -r option
     case $option in
-        1 ) option=yes
+        yes ) option=yes
             WEBSERVER="Pterodactyl"
             panel_fqdn
             ;;
@@ -412,60 +412,6 @@ panel_ssl(){
         panel_email
     fi
 }
-
-panel_email(){
-    send_summary
-    if  [ "$SSLSTATUS" =  "true" ]; then
-        echo "[!] Silakan masukkan email Anda. Email ini akan dibagikan dengan Lets Encrypt dan digunakan untuk menyiapkan Panel ini."
-        fi
-    if  [ "$SSLSTATUS" =  "false" ]; then
-        echo "[!] Silakan masukkan email Anda. Ini akan digunakan untuk mengatur Panel ini."
-        fi
-    read -r EMAIL
-    panel_username
-}
-
-panel_username(){
-    send_summary
-    echo "[!] Silakan masukkan nama pengguna untuk akun admin. Anda dapat menggunakan nama pengguna Anda untuk masuk ke Akun Pterodactyl Anda."
-    read -r USERNAME
-    panel_firstname
-}
-panel_firstname(){
-    send_summary
-    echo "[!] Masukkan nama depan untuk akun admin."
-    read -r FIRSTNAME
-    panel_lastname
-}
-
-panel_lastname(){
-    send_summary
-    echo "[!] Masukkan nama belakang untuk akun admin."
-    read -r LASTNAME
-    panel_password
-}
-
-panel_password(){
-    send_summary
-    echo "[!] Masukkan kata sandi untuk akun admin."
-    local USERPASSWORD=""
-    while IFS= read -r -s -n 1 char; do
-        if [[ $char == $'\0' ]]; then
-            break
-        elif [[ $char == $'\177' ]]; then
-            if [ -n "$USERPASSWORD" ]; then
-                USERPASSWORD="${USERPASSWORD%?}"
-                echo -en "\b \b"
-            fi
-        else
-            echo -n '*'
-            USERPASSWORD+="$char"
-        fi
-    done
-    echo
-    panel_summary
-}
-
 
 
 
